@@ -2,10 +2,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 import { Plus, UsersRound, Trash2, Edit } from "lucide-react";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import DeleteTeamButton from "@/components/teams/DeleteTeamButton";
 
 async function getTeams() {
   const teams = await prisma.team.findMany({
@@ -131,7 +130,7 @@ export default async function TeamsPage() {
                         >
                           <Edit className="w-4 h-4" /> Editar
                         </Link>
-                        {/* Pode-se adicionar DeleteTeamButton depois */}
+                        <DeleteTeamButton id={team.id} teamName={team.name} />
                       </td>
                     )}
                   </tr>
