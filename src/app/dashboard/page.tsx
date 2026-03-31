@@ -1,14 +1,12 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { Users, Star, MessageSquare } from "lucide-react";
 import EvaluationRadarChart from "@/components/evaluations/EvaluationRadarChart";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import EmployeeAvatar from "@/components/employees/EmployeeAvatar";
-
-const prisma = new PrismaClient();
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {

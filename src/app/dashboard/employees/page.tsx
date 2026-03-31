@@ -1,11 +1,8 @@
 import Link from "next/link";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { Plus, Search, Filter } from "lucide-react";
 import { format } from "date-fns";
-
 import EmployeeAvatar from "@/components/employees/EmployeeAvatar";
-
-const prisma = new PrismaClient();
 
 // Next.js 15: searchParams is considered async if accessed dynamically a lot, but for simple use cases this signature works.
 export const dynamic = "force-dynamic";
