@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
@@ -6,8 +6,6 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import DeleteEmployeeButton from "@/components/employees/DeleteEmployeeButton";
 import EvaluationRadarChart from "@/components/evaluations/EvaluationRadarChart";
-
-const prisma = new PrismaClient();
 
 export default async function EmployeeDetailsPage({
   params,

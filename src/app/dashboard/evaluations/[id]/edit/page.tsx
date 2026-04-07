@@ -29,10 +29,15 @@ export default async function EditEvaluationPage({
   const initialData = {
     employeeId: evaluation.employeeId,
     punctuality: evaluation.punctuality,
+    punctualityComment: evaluation.punctualityComment || "",
     organization: evaluation.organization,
+    organizationComment: evaluation.organizationComment || "",
     knowledge: evaluation.knowledge,
+    knowledgeComment: evaluation.knowledgeComment || "",
     proactivity: evaluation.proactivity,
+    proactivityComment: evaluation.proactivityComment || "",
     commitment: evaluation.commitment,
+    commitmentComment: evaluation.commitmentComment || "",
   };
 
   return (

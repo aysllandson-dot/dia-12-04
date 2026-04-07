@@ -51,7 +51,8 @@ model Employee {
 model Team {
   id        String     @id @default(cuid())
   name      String     @unique
-  sector    String?    // Obra ou Setor de atuação da equipe
+  obra      String?    // Obra de atuação da equipe
+  sector    String?    // Setor de atuação da equipe
   employees Employee[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -64,10 +65,15 @@ model Evaluation {
   supervisorId  String
   supervisor    User         @relation(fields: [supervisorId], references: [id])
   punctuality   Int          // 1-5
+  punctualityComment String?  
   organization  Int          // 1-5
+  organizationComment String?  
   knowledge     Int          // 1-5
+  knowledgeComment String?     
   proactivity   Int          // 1-5
+  proactivityComment String?  
   commitment    Int          // 1-5
+  commitmentComment String?   
   average       Float        // calculated on create/update
   createdAt     DateTime     @default(now())
 }

@@ -77,7 +77,8 @@ export default async function TeamsPage() {
             <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-100">
               <tr>
                 <th className="px-6 py-4 font-medium">Nome da Equipe</th>
-                <th className="px-6 py-4 font-medium">Setor / Obra</th>
+                <th className="px-6 py-4 font-medium">Obra</th>
+                <th className="px-6 py-4 font-medium">Setor</th>
                 <th className="px-6 py-4 font-medium">Integrantes</th>
                 <th className="px-6 py-4 font-medium">Pontuação (Média)</th>
                 {isAdmin && <th className="px-6 py-4 font-medium text-right">Ações</th>}
@@ -86,7 +87,7 @@ export default async function TeamsPage() {
             <tbody className="divide-y divide-gray-100">
               {teams.length === 0 ? (
                 <tr>
-                  <td colSpan={isAdmin ? 5 : 4} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={isAdmin ? 6 : 5} className="px-6 py-8 text-center text-gray-500">
                     Nenhuma equipe cadastrada ainda.
                   </td>
                 </tr>
@@ -97,7 +98,16 @@ export default async function TeamsPage() {
                       {team.name}
                     </td>
                     <td className="px-6 py-4 text-gray-600">
-                      {team.sector || <span className="text-gray-400 text-xs italic">Não definido</span>}
+                      {team.obra || <span className="text-gray-400 text-xs italic">Não definido</span>}
+                    </td>
+                    <td className="px-6 py-4 text-gray-600">
+                      {team.sector ? (
+                        <span className="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
+                          {team.sector}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-xs italic">Não definido</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-gray-600">
                       <div className="flex items-center gap-2">

@@ -15,7 +15,13 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    const { punctuality, organization, knowledge, proactivity, commitment } = body;
+    const {
+      punctuality, punctualityComment,
+      organization, organizationComment,
+      knowledge, knowledgeComment,
+      proactivity, proactivityComment,
+      commitment, commitmentComment,
+    } = body;
 
     // Check ownership or admin
     const existingEvaluation = await prisma.evaluation.findUnique({
@@ -39,10 +45,15 @@ export async function PATCH(
       where: { id },
       data: {
         punctuality,
+        punctualityComment: punctualityComment || null,
         organization,
+        organizationComment: organizationComment || null,
         knowledge,
+        knowledgeComment: knowledgeComment || null,
         proactivity,
+        proactivityComment: proactivityComment || null,
         commitment,
+        commitmentComment: commitmentComment || null,
         average,
       },
     });

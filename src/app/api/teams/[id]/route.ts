@@ -53,6 +53,7 @@ export async function PUT(
       where: { id: resolvedParams.id },
       data: {
         name: validatedData.name,
+        obra: validatedData.obra || null,
         sector: validatedData.sector || null,
         employees: {
           set: validatedData.employeeIds?.map((id) => ({ id })) || [],

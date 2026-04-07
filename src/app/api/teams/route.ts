@@ -75,6 +75,7 @@ export async function POST(req: Request) {
     const team = await prisma.team.create({
       data: {
         name: validatedData.name,
+        obra: validatedData.obra || null,
         sector: validatedData.sector || null,
         employees: {
           connect: validatedData.employeeIds?.map((id) => ({ id })) || [],

@@ -17,6 +17,7 @@ type TeamFormProps = {
   initialData?: {
     id: string;
     name: string;
+    obra?: string | null;
     sector?: string | null;
     employees: Employee[];
   };
@@ -38,6 +39,7 @@ export default function TeamForm({ initialData }: TeamFormProps) {
     resolver: zodResolver(teamSchema),
     defaultValues: {
       name: initialData?.name || "",
+      obra: initialData?.obra || "",
       sector: initialData?.sector || "",
       employeeIds: initialData?.employees.map((e) => e.id) || [],
     },
@@ -127,19 +129,40 @@ export default function TeamForm({ initialData }: TeamFormProps) {
         )}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Obra / Setor de atuação
-        </label>
-        <input
-          {...register("sector")}
-          type="text"
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent outline-none transition-all"
-          placeholder="Ex: Obra Residencial Parque - Setor Sul"
-        />
-        {errors.sector && (
-          <p className="mt-1 text-sm text-red-600">{errors.sector.message}</p>
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Obra de atuação
+          </label>
+          <input
+            {...register("obra")}
+            type="text"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent outline-none transition-all"
+            placeholder="Ex: residencial leao dourado"
+          />
+          {errors.obra && (
+            <p className="mt-1 text-sm text-red-600">{errors.obra.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Setor
+          </label>
+          <select
+            {...register("sector")}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent outline-none transition-all bg-white"
+          >
+            <option value="">Selecione um setor</option>
+            <option value="Produção">Produção</option>
+            <option value="Infra">Infra</option>
+            <option value="UDE">UDE</option>
+            <option value="Suprimentos">Suprimentos</option>
+          </select>
+          {errors.sector && (
+            <p className="mt-1 text-sm text-red-600">{errors.sector.message}</p>
+          )}
+        </div>
       </div>
 
       <div>

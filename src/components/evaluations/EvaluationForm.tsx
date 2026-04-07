@@ -33,10 +33,15 @@ export default function EvaluationForm({
     defaultValues: {
       employeeId: initialData?.employeeId || defaultEmployeeId || "",
       punctuality: initialData?.punctuality || 3,
+      punctualityComment: initialData?.punctualityComment || "",
       organization: initialData?.organization || 3,
+      organizationComment: initialData?.organizationComment || "",
       knowledge: initialData?.knowledge || 3,
+      knowledgeComment: initialData?.knowledgeComment || "",
       proactivity: initialData?.proactivity || 3,
+      proactivityComment: initialData?.proactivityComment || "",
       commitment: initialData?.commitment || 3,
+      commitmentComment: initialData?.commitmentComment || "",
     },
   });
 
@@ -66,30 +71,48 @@ export default function EvaluationForm({
     }
   };
 
-  const StarRating = ({ name, label, description }: { name: keyof Omit<EvaluationFormValues, 'employeeId'>, label: string, description: string }) => {
+  const StarRating = ({
+    name,
+    commentName,
+    label,
+    description,
+  }: {
+    name: keyof Omit<EvaluationFormValues, 'employeeId' | 'punctualityComment' | 'organizationComment' | 'knowledgeComment' | 'proactivityComment' | 'commitmentComment'>;
+    commentName: keyof Pick<EvaluationFormValues, 'punctualityComment' | 'organizationComment' | 'knowledgeComment' | 'proactivityComment' | 'commitmentComment'>;
+    label: string;
+    description: string;
+  }) => {
     const value = watch(name);
     return (
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-800">
-        <div className="mb-3 sm:mb-0">
-          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{label}</h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
+      <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-800 space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100">{label}</h4>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
+          </div>
+          <div className="flex gap-1 flex-shrink-0">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => setValue(name, star, { shouldValidate: true })}
+                className={`p-1 transition-colors ${
+                  star <= value
+                    ? "text-[var(--color-secondary)]"
+                    : "text-gray-300 dark:text-slate-600 hover:text-yellow-400"
+                }`}
+              >
+                <Star className="w-8 h-8 font-bold" fill={star <= value ? "currentColor" : "none"} strokeWidth={1.5} />
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex gap-1">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <button
-              key={star}
-              type="button"
-              onClick={() => setValue(name, star, { shouldValidate: true })}
-              className={`p-1 transition-colors ${
-                star <= value 
-                  ? "text-[var(--color-secondary)]" 
-                  : "text-gray-300 dark:text-slate-600 hover:text-yellow-400"
-              }`}
-            >
-              <Star className="w-8 h-8 font-bold" fill={star <= value ? "currentColor" : "none"} strokeWidth={1.5} />
-            </button>
-          ))}
-        </div>
+        <textarea
+          {...register(commentName)}
+          rows={2}
+          placeholder={`Justifique a nota de ${label.toLowerCase()}...`}
+          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent outline-none resize-none transition-all"
+        />
       </div>
     );
   };
@@ -125,27 +148,32 @@ export default function EvaluationForm({
           <h3 className="text-lg font-bold text-[var(--color-primary)] dark:text-blue-400 mb-2">Competências</h3>
           
           <StarRating 
-            name="punctuality" 
+            name="punctuality"
+            commentName="punctualityComment"
             label="Pontualidade" 
             description="Chega no horário, cumpre prazos e cronogramas." 
           />
           <StarRating 
-            name="organization" 
+            name="organization"
+            commentName="organizationComment"
             label="Organização" 
             description="Mantém o local de trabalho limpo e ferramentas organizadas." 
           />
           <StarRating 
-            name="knowledge" 
+            name="knowledge"
+            commentName="knowledgeComment"
             label="Conhecimento" 
             description="Domínio técnico e qualidade na execução da função." 
           />
           <StarRating 
-            name="proactivity" 
+            name="proactivity"
+            commentName="proactivityComment"
             label="Proatividade" 
             description="Iniciativa para resolver problemas e antecipar soluções." 
           />
           <StarRating 
-            name="commitment" 
+            name="commitment"
+            commentName="commitmentComment"
             label="Comprometimento" 
             description="Dedicação, responsabilidade com a segurança e com a equipe." 
           />
