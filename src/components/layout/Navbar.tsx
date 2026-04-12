@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { Menu, UserCircle, LogOut, Bell, Search } from "lucide-react";
 import Image from "next/image";
+import NotificationDropdown from "./NotificationDropdown";
 
 export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   const { data: session } = useSession();
@@ -22,15 +24,15 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
           <Menu className="w-6 h-6" />
         </button>
         
-        {/* Mobile Logo */}
-        <div className="md:hidden relative w-40 h-10">
+        {/* Mobile Logo linked to dashboard */}
+        <Link href="/dashboard" className="md:hidden relative w-40 h-10 block group">
           <Image
             src="/images/Logo.png"
             alt="Viana & Moura"
             fill
-            className="object-contain"
+            className="object-contain transition-transform group-hover:scale-105"
           />
-        </div>
+        </Link>
 
         {/* Desktop Search / Breadcrumb Placeholder */}
         <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 rounded-xl border border-slate-200/50 dark:border-slate-700/50 text-slate-400 focus-within:text-slate-600 focus-within:border-slate-300 transition-all">
@@ -44,11 +46,8 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
       </div>
       
       <div className="flex items-center gap-2 md:gap-4">
-        {/* Notifications */}
-        <button className="p-2 text-slate-400 hover:text-[var(--primary)] hover:bg-slate-100 md:dark:hover:bg-slate-800 rounded-xl transition-all relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-[var(--secondary)] rounded-full border-2 border-white dark:border-slate-900" />
-        </button>
+        {/* Notifications Dropdown */}
+        <NotificationDropdown />
 
         <div className="w-px h-8 bg-slate-200 dark:bg-slate-700 mx-1 hidden md:block" />
 
