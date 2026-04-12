@@ -10,12 +10,18 @@ import {
   FileText,
   Settings,
   UsersRound,
-  ChevronRight
+  ChevronRight,
+  X
 } from "lucide-react";
 
 import Image from "next/image";
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -28,9 +34,20 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-72 sidebar-glass text-white flex flex-col h-full shrink-0 z-20 hidden md:flex">
+    <aside className={`
+      fixed md:relative inset-y-0 left-0 w-72 sidebar-glass text-white flex flex-col h-full shrink-0 z-50 md:z-20
+      transition-all duration-300 ease-in-out md:translate-x-0
+      ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    `}>
       {/* Brand Section */}
       <div className="h-44 flex flex-col items-center justify-center px-6 py-8 relative overflow-hidden">
+        {/* Mobile Close Button */}
+        <button 
+          onClick={onClose}
+          className="md:hidden absolute top-4 right-4 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
         <div className="absolute inset-0 bg-black/10 backdrop-blur-sm -z-10" />
         <Link 
           href="/dashboard" 

@@ -4,7 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Menu, UserCircle, LogOut, Bell, Search } from "lucide-react";
 import Image from "next/image";
 
-export default function Navbar() {
+export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   const { data: session } = useSession();
 
   return (
@@ -15,7 +15,10 @@ export default function Navbar() {
 
       <div className="flex items-center gap-4">
         {/* Mobile menu button */}
-        <button className="md:hidden p-2 rounded-xl hover:bg-white/10 text-white transition-colors">
+        <button 
+          onClick={onMenuClick}
+          className="md:hidden p-2 rounded-xl hover:bg-white/10 text-white transition-colors"
+        >
           <Menu className="w-6 h-6" />
         </button>
         
