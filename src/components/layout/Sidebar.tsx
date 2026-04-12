@@ -102,7 +102,7 @@ export default function Sidebar() {
         
         <div className="mt-6 pt-6 border-t border-white/5 flex items-center justify-between px-2">
           <div className="text-[10px] text-white/20 uppercase tracking-widest font-bold">
-            v0.1.0-premium
+            v1.0.0-PRO
           </div>
           <div className="w-2 h-2 rounded-full bg-green-500/50 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
         </div>
