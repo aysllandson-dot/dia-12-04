@@ -209,7 +209,7 @@ export default function EmployeeForm({ initialData, employeeId }: EmployeeFormPr
         <div>
           <h3 className="text-lg font-semibold text-[var(--color-primary)] dark:text-blue-400 mb-4 border-t border-gray-100 dark:border-slate-800 pt-4">Endereço</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1">Rua</label>
               <input {...register("street")} className="w-full p-2 border rounded-md dark:bg-slate-800 dark:border-slate-700 focus:ring-1 focus:ring-[var(--color-primary)] outline-none" />
               {errors.street && <span className="text-red-500 text-xs">{errors.street.message}</span>}
@@ -224,7 +224,7 @@ export default function EmployeeForm({ initialData, employeeId }: EmployeeFormPr
                <input {...register("neighborhood")} className="w-full p-2 border rounded-md dark:bg-slate-800 dark:border-slate-700 focus:ring-1 focus:ring-[var(--color-primary)] outline-none" />
                {errors.neighborhood && <span className="text-red-500 text-xs">{errors.neighborhood.message}</span>}
             </div>
-            <div className="col-span-2">
+            <div className="md:col-span-2">
                <label className="block text-sm font-medium mb-1">Cidade</label>
                <input {...register("city")} className="w-full p-2 border rounded-md dark:bg-slate-800 dark:border-slate-700 focus:ring-1 focus:ring-[var(--color-primary)] outline-none" />
                {errors.city && <span className="text-red-500 text-xs">{errors.city.message}</span>}
