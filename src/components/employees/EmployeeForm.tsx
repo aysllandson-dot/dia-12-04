@@ -8,12 +8,17 @@ import { useState, useRef, useEffect } from "react";
 import { Camera, User } from "lucide-react";
 import Image from "next/image";
 
-export default function EmployeeForm() {
+interface EmployeeFormProps {
+  initialData?: any;
+  employeeId?: string;
+}
+
+export default function EmployeeForm({ initialData, employeeId }: EmployeeFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [photoUrl, setPhotoUrl] = useState<string>("");
+  const [photoPreview, setPhotoPreview] = useState<string | null>(initialData?.photoUrl || null);
+  const [photoUrl, setPhotoUrl] = useState<string>(initialData?.photoUrl || "");
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [availableObras, setAvailableObras] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,13 +43,19 @@ export default function EmployeeForm() {
     fetchObras();
   }, []);
 
+  const formattedInitialData = initialData ? {
+    ...initialData,
+    birthDate: initialData.birthDate ? new Date(initialData.birthDate).toISOString().split('T')[0] : "",
+    admissionDate: initialData.admissionDate ? new Date(initialData.admissionDate).toISOString().split('T')[0] : "",
+  } : undefined;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeSchema),
-    defaultValues: {
+    defaultValues: formattedInitialData || {
       gender: "Masculino",
       status: "Ativo",
     },
@@ -78,17 +89,20 @@ export default function EmployeeForm() {
     setIsSubmitting(true);
     setErrorMsg("");
     try {
-      const response = await fetch("/api/employees", {
-        method: "POST",
+      const url = employeeId ? `/api/employees/${employeeId}` : "/api/employees";
+      const method = employeeId ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, photoUrl }),
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao salvar funcionário");
+        throw new Error(employeeId ? "Erro ao atualizar funcionário" : "Erro ao salvar funcionário");
       }
 
-      router.push("/dashboard/employees");
+      router.push(employeeId ? `/dashboard/employees/${employeeId}` : "/dashboard/employees");
       router.refresh();
     } catch (error: any) {
       setErrorMsg(error.message);
@@ -100,7 +114,7 @@ export default function EmployeeForm() {
   return (
     <div className="bg-white dark:bg-slate-900 shadow-sm rounded-xl border border-gray-200 dark:border-slate-800 p-6 max-w-4xl mx-auto">
       <h2 className="text-xl font-bold mb-6 text-gray-800 dark:text-gray-100 border-b pb-4">
-        Cadastrar Novo Funcionário
+        {employeeId ? "Editar Funcionário" : "Cadastrar Novo Funcionário"}
       </h2>
 
       {errorMsg && (
@@ -293,7 +307,7 @@ export default function EmployeeForm() {
             disabled={isSubmitting}
             className="bg-[var(--color-primary)] hover:opacity-90 text-white px-8 py-2 rounded-md font-medium transition-opacity"
           >
-            {isSubmitting ? "Salvando..." : "Salvar Funcionário"}
+            {isSubmitting ? "Salvando..." : employeeId ? "Salvar Alterações" : "Salvar Funcionário"}
           </button>
         </div>
       </form>

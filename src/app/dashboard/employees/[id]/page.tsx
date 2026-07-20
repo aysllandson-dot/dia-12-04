@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Edit } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import DeleteEmployeeButton from "@/components/employees/DeleteEmployeeButton";
@@ -40,6 +40,13 @@ export default async function EmployeeDetailsPage({
           <h1 className="text-2xl font-bold tracking-tight">Detalhes do Funcionário</h1>
         </div>
         <div className="flex gap-3">
+          <Link
+            href={`/dashboard/employees/${employee.id}/edit`}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-md font-medium transition-colors"
+          >
+            <Edit className="w-4 h-4" />
+            Editar
+          </Link>
           <DeleteEmployeeButton id={employee.id} />
         </div>
       </div>
