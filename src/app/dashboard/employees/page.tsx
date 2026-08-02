@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Plus, Search, Filter } from "lucide-react";
-import { format } from "date-fns";
 import EmployeeAvatar from "@/components/employees/EmployeeAvatar";
 
 // Next.js 15: searchParams is considered async if accessed dynamically a lot, but for simple use cases this signature works.
@@ -30,9 +29,11 @@ export default async function EmployeesPage({
       team: {
         select: { name: true, sector: true }
       },
-      admissionDate: true,
       status: true,
       photoUrl: true,
+      evaluations: {
+        select: { average: true }
+      }
     },
     orderBy: { fullName: "asc" },
   });
@@ -73,7 +74,7 @@ export default async function EmployeesPage({
                 <th className="p-4">Setor</th>
                 <th className="p-4">Obra</th>
                 <th className="p-4">Equipe</th>
-                <th className="p-4 hidden sm:table-cell">Admissão</th>
+                <th className="p-4 text-center">Média Geral</th>
                 <th className="p-4">Status</th>
                 <th className="p-4 text-right">Ações</th>
               </tr>
@@ -81,55 +82,73 @@ export default async function EmployeesPage({
             <tbody className="divide-y divide-gray-100 dark:divide-slate-800 text-sm">
               {employees.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={8} className="p-8 text-center text-gray-500 dark:text-gray-400">
                     Nenhum funcionário encontrado.
                   </td>
                 </tr>
               ) : (
-                employees.map((emp: any) => (
-                  <tr key={emp.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <EmployeeAvatar photoUrl={emp.photoUrl} fullName={emp.fullName} size="sm" />
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">{emp.fullName}</span>
-                      </div>
-                    </td>
-                    <td className="p-4 text-gray-600 dark:text-gray-400">{emp.role}</td>
-                    <td className="p-4 text-gray-600 dark:text-gray-400 font-medium">
-                      {emp.sector}
-                    </td>
-                    <td className="p-4 text-gray-600 dark:text-gray-400 font-medium">
-                      {emp.team?.sector || emp.obra || "-"}
-                    </td>
-                    <td className="p-4 text-gray-600 dark:text-gray-400">
-                      {emp.team ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-medium text-xs border border-blue-100">
-                          {emp.team.name}
+                employees.map((emp: any) => {
+                  const avgScore = emp.evaluations.length > 0
+                    ? emp.evaluations.reduce((acc: number, curr: any) => acc + curr.average, 0) / emp.evaluations.length
+                    : null;
+
+                  return (
+                    <tr key={emp.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <EmployeeAvatar photoUrl={emp.photoUrl} fullName={emp.fullName} size="sm" />
+                          <span className="font-semibold text-gray-900 dark:text-gray-100">{emp.fullName}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-gray-600 dark:text-gray-400">{emp.role}</td>
+                      <td className="p-4 text-gray-600 dark:text-gray-400 font-medium">
+                        {emp.sector}
+                      </td>
+                      <td className="p-4 text-gray-600 dark:text-gray-400 font-medium">
+                        {emp.team?.sector || emp.obra || "-"}
+                      </td>
+                      <td className="p-4 text-gray-600 dark:text-gray-400">
+                        {emp.team ? (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-medium text-xs border border-blue-100">
+                            {emp.team.name}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 italic text-xs">Sem equipe</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center">
+                        {avgScore !== null ? (
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-black ${
+                            avgScore >= 4 
+                              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
+                              : avgScore >= 3 
+                              ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" 
+                              : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                          }`}>
+                            {avgScore.toFixed(1)} ★
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 italic text-xs">Sem avaliações</span>
+                        )}
+                      </td>
+                      <td className="p-4">
+                        <span className={`inline-flex px-2.5 py-1 text-xs rounded-full font-medium ${
+                          emp.status === "Ativo" 
+                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                            : emp.status === "Inativo"
+                            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                            : "bg-[var(--color-secondary)] text-white opacity-90"
+                        }`}>
+                          {emp.status}
                         </span>
-                      ) : (
-                        <span className="text-gray-400 italic text-xs">Sem equipe</span>
-                      )}
-                    </td>
-                    <td className="p-4 text-gray-600 dark:text-gray-400 hidden sm:table-cell">
-                      {format(new Date(emp.admissionDate), "dd/MM/yyyy")}
-                    </td>
-                    <td className="p-4">
-                      <span className={`inline-flex px-2.5 py-1 text-xs rounded-full font-medium ${
-                        emp.status === "Ativo" 
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                          : emp.status === "Inativo"
-                          ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                          : "bg-[var(--color-secondary)] text-white opacity-90"
-                      }`}>
-                        {emp.status}
-                      </span>
-                    </td>
-                    <td className="p-4 text-right space-x-3">
-                      <Link href={`/dashboard/employees/${emp.id}`} className="text-[var(--color-primary)] dark:text-blue-400 hover:underline font-medium">Ver</Link>
-                      <Link href={`/dashboard/evaluations/new?employeeId=${emp.id}`} className="text-[var(--color-secondary)] hover:text-yellow-600 font-medium transition-colors">Avaliar</Link>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="p-4 text-right space-x-3">
+                        <Link href={`/dashboard/employees/${emp.id}`} className="text-[var(--color-primary)] dark:text-blue-400 hover:underline font-medium">Ver</Link>
+                        <Link href={`/dashboard/evaluations/new?employeeId=${emp.id}`} className="text-[var(--color-secondary)] hover:text-yellow-600 font-medium transition-colors">Avaliar</Link>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
