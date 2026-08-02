@@ -32,14 +32,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-background-alt)]">
+    <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] dark:bg-slate-950">
       <div className="max-w-md w-full p-8 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-gray-100 dark:border-slate-800">
         <div className="flex justify-center mb-8">
           <div className="flex flex-col items-center">
-            <div className="relative w-48 h-12 mb-4">
+            <div className="relative w-64 h-48 mb-4">
               <Image
-                src="/images/Logo.png"
-                alt="Viana & Moura"
+                src="/images/CapaceteDeOuro.jpg"
+                alt="Capacete de Ouro - Viana & Moura"
                 fill
                 className="object-contain"
                 priority
@@ -48,7 +48,7 @@ export default function LoginPage() {
             <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
               SGRH
             </h2>
-            <p className="text-[var(--color-text-muted)] text-sm mt-1">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
               Sistema de Gestão de Recursos Humanos
             </p>
           </div>

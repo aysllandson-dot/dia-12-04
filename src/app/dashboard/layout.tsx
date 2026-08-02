@@ -19,7 +19,7 @@ export default function DashboardLayout({
   }, [pathname]);
 
   return (
-    <div className="flex h-screen bg-[var(--color-background-alt)] dark:bg-slate-950 overflow-hidden relative">
+    <div className="flex h-screen bg-[#F8FAFC] dark:bg-slate-950 overflow-hidden relative">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       <div className="flex flex-col flex-1 min-w-0">

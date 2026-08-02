@@ -40,7 +40,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       ${isOpen ? "translate-x-0" : "-translate-x-full"}
     `}>
       {/* Brand Section */}
-      <div className="h-44 flex flex-col items-center justify-center px-6 py-8 relative overflow-hidden">
+      <div className="h-52 flex flex-col items-center justify-center px-6 py-8 relative overflow-hidden">
         {/* Mobile Close Button */}
         <button 
           onClick={onClose}
@@ -51,11 +51,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="absolute inset-0 bg-black/10 backdrop-blur-sm -z-10" />
         <Link 
           href="/dashboard" 
-          className="relative w-full h-24 flex items-center justify-center transition-all duration-500 hover:scale-[1.02] active:scale-95 group"
+          className="relative w-full h-32 flex items-center justify-center transition-all duration-500 hover:scale-[1.02] active:scale-95 group"
         >
           <Image
-            src="/images/Logo.png"
-            alt="Viana & Moura"
+            src="/images/CapaceteDeOuro.jpg"
+            alt="Capacete de Ouro - Viana & Moura"
             fill
             className="object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-500"
             priority
