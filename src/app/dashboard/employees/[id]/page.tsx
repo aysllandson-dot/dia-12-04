@@ -30,6 +30,10 @@ export default async function EmployeeDetailsPage({
     notFound();
   }
 
+  const totalAverage = employee.evaluations.length > 0
+    ? (employee.evaluations.reduce((acc: number, curr: any) => acc + curr.average, 0) / employee.evaluations.length).toFixed(1)
+    : null;
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -135,8 +139,16 @@ export default async function EmployeeDetailsPage({
         </div>
         
         <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Histórico de Avaliações</h2>
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Histórico de Avaliações</h2>
+              {totalAverage && (
+                <span className="px-3 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-sm">
+                  <span>Média Geral Total:</span>
+                  <span className="text-sm font-black">{totalAverage}</span>
+                </span>
+              )}
+            </div>
             <Link 
               href={`/dashboard/evaluations/new?employeeId=${employee.id}`}
               className="text-sm bg-blue-50 text-[var(--color-primary)] hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1"
@@ -179,6 +191,24 @@ export default async function EmployeeDetailsPage({
                   ))
                 )}
               </tbody>
+              {employee.evaluations.length > 0 && (
+                <tfoot>
+                  <tr className="bg-gray-50/80 dark:bg-slate-800/80 border-t-2 border-gray-200 dark:border-slate-700 font-bold">
+                    <td colSpan={2} className="p-3 text-gray-900 dark:text-white text-right">
+                      Média Geral Total:
+                    </td>
+                    <td className="p-3 text-center">
+                      <span className={`px-2.5 py-1 rounded-md text-sm font-black ${
+                        Number(totalAverage) >= 4 ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400' :
+                        Number(totalAverage) >= 3 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400' :
+                        'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400'
+                      }`}>
+                        {totalAverage}
+                      </span>
+                    </td>
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
         </div>
