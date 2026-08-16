@@ -68,7 +68,7 @@ export default function EvaluationRadarChart({ evaluations }: EvaluationRadarCha
         <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
           <PolarGrid stroke="#e5e7eb" />
           <PolarAngleAxis dataKey="subject" tick={{ fill: '#6b7280', fontSize: 12 }} />
-          <PolarRadiusAxis angle={30} domain={[0, 5]} tick={{ fill: '#9ca3af' }} />
+          <PolarRadiusAxis angle={30} domain={[0, 5]} tick={false} axisLine={false} />
           <Radar
             name="Nota"
             dataKey="A"
