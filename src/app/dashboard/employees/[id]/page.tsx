@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Plus, Edit, GraduationCap } from "lucide-react";
+import { ArrowLeft, Plus, Edit, GraduationCap, Wrench } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
 import DeleteEmployeeButton from "@/components/employees/DeleteEmployeeButton";
@@ -26,6 +26,10 @@ export default async function EmployeeDetailsPage({
       trainings: {
         orderBy: { createdAt: "desc" },
         include: { training: true }
+      },
+      skills: {
+        orderBy: { createdAt: "desc" },
+        include: { skill: true }
       }
     }
   });
@@ -218,16 +222,16 @@ export default async function EmployeeDetailsPage({
         </div>
       </div>
 
-      {/* Seção de Treinamentos e Habilidades */}
+      {/* Seção de Treinamentos */}
       <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-800">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-[var(--color-primary)]" />
-            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Treinamentos & Habilidades</h2>
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Treinamentos</h2>
           </div>
           <Link
             href={`/dashboard/trainings/new?employeeId=${employee.id}`}
-            className="text-sm bg-purple-50 text-purple-700 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1"
+            className="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1"
           >
             <Plus className="w-4 h-4" /> Registrar Treinamento
           </Link>
@@ -278,6 +282,72 @@ export default async function EmployeeDetailsPage({
                           : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                       }`}>
                         {tr.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Seção de Habilidades Práticas */}
+      <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-800">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <Wrench className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Habilidades Práticas</h2>
+          </div>
+          <Link
+            href={`/dashboard/skills/new?employeeId=${employee.id}`}
+            className="text-sm bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/50 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1"
+          >
+            <Plus className="w-4 h-4" /> Registrar Habilidade
+          </Link>
+        </div>
+
+        <div className="bg-white dark:bg-slate-900 shadow-sm rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden">
+          <table className="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr className="bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase">
+                <th className="p-3">Habilidade Prática</th>
+                <th className="p-3">Categoria</th>
+                <th className="p-3">Experiência</th>
+                <th className="p-3 text-center">Nível de Domínio</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
+              {employee.skills.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="p-6 text-center text-gray-500 italic">
+                    Nenhuma habilidade prática registrada para este funcionário.
+                  </td>
+                </tr>
+              ) : (
+                employee.skills.map((sk: any) => (
+                  <tr key={sk.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="p-3 font-semibold text-slate-800 dark:text-slate-200">
+                      {sk.skill.name}
+                      {sk.notes && <p className="text-xs text-slate-400 italic font-normal">{sk.notes}</p>}
+                    </td>
+                    <td className="p-3 text-xs text-slate-500">
+                      {sk.skill.category || "Geral"}
+                    </td>
+                    <td className="p-3 text-xs text-slate-600 dark:text-slate-300">
+                      {sk.experienceYears ? `${sk.experienceYears} anos` : "-"}
+                    </td>
+                    <td className="p-3 text-center">
+                      <span className={`inline-flex px-2.5 py-0.5 text-xs rounded-full font-bold ${
+                        sk.level === "Especialista"
+                          ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
+                          : sk.level === "Avançado"
+                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                          : sk.level === "Intermediário"
+                          ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                          : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                      }`}>
+                        {sk.level}
                       </span>
                     </td>
                   </tr>

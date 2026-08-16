@@ -46,10 +46,10 @@ export default async function TrainingsPage({
         <div>
           <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
             <GraduationCap className="w-8 h-8 text-[var(--color-primary)]" />
-            Treinamentos & Habilidades
+            Treinamentos
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 font-medium">
-            Gestão de capacitações, certificações e habilidades da equipe.
+            Gestão de capacitações, normas e certificações da equipe.
           </p>
         </div>
 
@@ -150,7 +150,7 @@ export default async function TrainingsPage({
             <thead>
               <tr className="bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">
                 <th className="p-4">Funcionário</th>
-                <th className="p-4">Treinamento / Habilidade</th>
+                <th className="p-4">Treinamento / Curso</th>
                 <th className="p-4">Categoria / Carga H.</th>
                 <th className="p-4">Data Conclusão</th>
                 <th className="p-4">Validade</th>
